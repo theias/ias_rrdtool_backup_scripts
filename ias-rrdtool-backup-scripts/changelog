@@ -1,0 +1,6 @@
+ias-rrdtool-backup-scripts 1.0.1-0 noarch; urgency=low
+
+	* initial packaging stuff
+
+ -- Martin VanWinkle  mvanwinkle@ias.edu  Wed, 08 Nov 2017 11:53:24 -0500
+

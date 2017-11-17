@@ -1,0 +1,4 @@
+Architecture: all
+Maintainer: CHANGEME
+#Depends: rsync
+Priority: optional
