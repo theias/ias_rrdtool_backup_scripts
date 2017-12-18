@@ -21,55 +21,55 @@ function rrdtool_compress_usage ()
 
 function rrdtool_compress_dump ()
 {
-	for i in `find $INPUT_DIR -name "*.rrd"`
+	find $INPUT_DIR -type f -name "*.rrd" -print0 | while IFS= read -r -d '' i
 	do
 		# echo $i
-		bn_i=`basename $i`
-		dn_i=`dirname $i`
+		bn_i=`basename "$i"`
+		dn_i=`dirname "$i"`
 		# echo DNI: $dn_i
 		sub_path=`echo "$dn_i" | sed -r "s|$INPUT_DIR||"`
-		full_dest_dir=$OUTPUT_DIR/$sub_path
+		full_dest_dir="$OUTPUT_DIR/$sub_path"
 		# echo "full_dest_dir $full_dest_dir"
 		
-		if [[ ! -d $full_dest_dir ]]
+		if [[ ! -d "$full_dest_dir" ]]
 		then
 			echo "Making dir: $full_dest_dir"
-			mkdir -p $full_dest_dir
+			mkdir -p "$full_dest_dir"
 		fi
-		output_file_name=$full_dest_dir/$bn_i.xml
+		output_file_name="$full_dest_dir/$bn_i.xml"
 		echo "Dumping $i to $output_file_name"
-		rrdtool dump $i > $output_file_name
-		gzip $output_file_name
+		rrdtool dump "$i" > "$output_file_name"
+		gzip "$output_file_name"
 		
 	done
 }
 
 function rrdtool_compress_restore ()
 {
-	for i in `find $INPUT_DIR -name "*.gz"`
+	find $INPUT_DIR -type f -name "*.gz" -print0 | while IFS= read -r -d '' i
 	do
 		# echo $i
-		bn_i=`basename $i`
-		dn_i=`dirname $i`
+		bn_i=`basename "$i"`
+		dn_i=`dirname "$i"`
 		#echo "DNI: $dn_i"
 		#echo "BNI: $bn_i"
 		sub_path=`echo "$dn_i" | sed -r "s|$INPUT_DIR||"`
 
 		#echo "Subpath: $sub_path"
 		#exit
-		full_dest_dir=$OUTPUT_DIR/$sub_path
+		full_dest_dir="$OUTPUT_DIR/$sub_path"
 		#echo "full_dest_dir $full_dest_dir"
-		if [[ ! -d $full_dest_dir ]]
+		if [[ ! -d "$full_dest_dir" ]]
 		then
 			echo "Making dir: $full_dest_dir"
-			mkdir -p $full_dest_dir
+			mkdir -p "$full_dest_dir"
 		fi
 		
-		gz_tmp=$full_dest_dir/$bn_i
+		gz_tmp="$full_dest_dir/$bn_i"
 		
-		cp $i $gz_tmp
+		cp "$i" "$gz_tmp"
 		
-		gunzip $gz_tmp
+		gunzip "$gz_tmp"
 		
 		xml_tmp=`echo $gz_tmp |sed s/.gz$//g`
 		
@@ -78,27 +78,27 @@ function rrdtool_compress_restore ()
 		output_file_name=`echo $xml_tmp |sed s/.xml$//g`
 		echo "Restoring $i to $output_file_name"
 
-		rrdtool restore $xml_tmp $output_file_name
+		rrdtool restore "$xml_tmp" "$output_file_name"
 		
-		rm $xml_tmp
+		rm "$xml_tmp"
 
 		
 	done
 }
 
-if [[ ! -d $INPUT_DIR ]]
+if [[ ! -d "$INPUT_DIR" ]]
 then
 	>&2 echo "Error.  input dir $INPUT_DIR is not a directory"
 	rrdtool_compress_usage
 fi
 
-if [[ ! -d $OUTPUT_DIR ]]
+if [[ ! -d "$OUTPUT_DIR" ]]
 then
 	>&2 echo "Error.  output dir $OUTPUT_DIR is not a directory."
 	rrdtool_compress_usage
 fi
 
-if [[ ! -w $OUTPUT_DIR ]]
+if [[ ! -w "$OUTPUT_DIR" ]]
 then
 	
 	>&2 echo "Error.  output dir $OUTPUT_DIR is not writable."
