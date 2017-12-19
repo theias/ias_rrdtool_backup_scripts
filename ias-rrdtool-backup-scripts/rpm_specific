@@ -1,4 +1,4 @@
-#Requires: 
+Requires: rrdtool
 AutoReqProv: no 
 Summary: RRD tool backup stuff
 Group: Generic Group
