@@ -71,11 +71,11 @@ function rrdtool_compress_restore ()
 		
 		gunzip "$gz_tmp"
 		
-		xml_tmp=`echo $gz_tmp |sed s/.gz$//g`
+		xml_tmp=`echo "$gz_tmp" |sed s/.gz$//g`
 		
 		# echo "GZ tmp:  $gz_tmp "
 		# echo "XML tmp: $xml_tmp"
-		output_file_name=`echo $xml_tmp |sed s/.xml$//g`
+		output_file_name=`echo "$xml_tmp" |sed s/.xml$//g`
 		echo "Restoring $i to $output_file_name"
 
 		rrdtool restore "$xml_tmp" "$output_file_name"
